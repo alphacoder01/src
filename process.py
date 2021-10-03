@@ -204,7 +204,12 @@ def find_strokes_indices(player_1_boxes, player_2_boxes, ball_positions, skeleto
 
 
 def mark_player_box(frame, boxes, frame_num):
-    box = boxes[frame_num]
+    # flag = 0
+    try:
+        box = boxes[frame_num]
+        # flag =1
+    except:
+        return frame
     if box[0] is not None:
         cv2.rectangle(frame, (int(box[0]), int(box[1])), (int(
             box[2]), int(box[3])), [255, 0, 255], 2)
@@ -348,18 +353,25 @@ def add_data_to_video(input_video, court_detector, players_detector, ball_detect
                              int(f_y(frame_number)) - 50),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255) if i != 0 else (255, 0, 0), 2)
 
-        cv2.putText(img, 'Distance: {:.2f} m'.format(player1_dists[frame_number] / 100),
+        try:
+            alpha = player1_dists[frame_number]
+            beta = player2_dists[frame_number]
+        except:
+            print(len(player1_dists), len(player2_dists), frame_number)
+            alpha = player1_dists[frame_number - 1]
+            beta = player2_dists[frame_number - 1]
+        cv2.putText(img, 'Distance: {:.2f} m'.format(alpha / 100),
                     (50, 500),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
-        cv2.putText(img, 'Distance: {:.2f} m'.format(player2_dists[frame_number] / 100),
+        cv2.putText(img, 'Distance: {:.2f} m'.format(beta / 100),
                     (100, 150),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
 
         # display frame
-        if show_video:
-            cv2.imshow('Output', img)
-            if cv2.waitKey(1) & 0xff == 27:
-                cv2.destroyAllWindows()
+        # if show_video:
+        # cv2.imshow('Output', img)
+        # if cv2.waitKey(1) & 0xff == 27:
+        # cv2.destroyAllWindows()
 
         # save output videos
         if with_frame == 0:
@@ -374,7 +386,7 @@ def add_data_to_video(input_video, court_detector, players_detector, ball_detect
     print(f'New videos created, file name - {output_file}.avi')
     cap.release()
     out.release()
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 
 def create_top_view(court_detector, detection_model):
@@ -400,7 +412,7 @@ def create_top_view(court_detector, detection_model):
                 feet_pos_2[1])), 10, (0, 0, 255), 15)
         out.write(frame)
     out.release()
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 
 def video_process(video_path, show_video=False, include_video=True,
@@ -430,7 +442,7 @@ def video_process(video_path, show_video=False, include_video=True,
     pose_extractor = PoseExtractor(
         person_num=1, box=stickman_box, dtype=dtype) if stickman else None
     stroke_recognition = ActionRecognition(
-        './saved states/storke_classifier_weights.pth')
+        'storke_classifier_weights.pth')
     ball_detector = BallDetector(
         './saved states/tracknet_weights_2_classes.pth', out_channels=2)
 
@@ -485,7 +497,7 @@ def video_process(video_path, show_video=False, include_video=True,
           (length, length, length / total_time), '\n', end='')
     print('Processing completed')
     video.release()
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
     detection_model.find_player_2_box()
 
@@ -533,7 +545,7 @@ def video_process(video_path, show_video=False, include_video=True,
 
 def main():
     s = time.time()
-    video_process(video_path='./selected_frames_Trim_Trim.mp4', show_video=True, stickman=False, stickman_box=False, smoothing=False,
+    video_process(video_path='./selected_frames_Trim.mp4', show_video=False, stickman=True, stickman_box=True, smoothing=True,
                   court=True, top_view=True)
     print(f'Total computation time : {time.time() - s} seconds')
 

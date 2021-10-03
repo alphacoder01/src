@@ -253,12 +253,13 @@ class CourtDetector:
 
                     k += 1
 
-        if self.verbose:
-            frame = self.frame.copy()
-            court = self.add_court_overlay(frame, max_mat, (255, 0, 0))
-            cv2.imshow('court', court)
-            if cv2.waitKey(0) & 0xff == 27:
-                cv2.destroyAllWindows()
+        # if self.verbose:
+        #     frame = self.frame.copy()
+        #     court = self.add_court_overlay(frame, max_mat, (255, 0, 0))
+        #     cv2.imshow('court', court)
+        #     if cv2.waitKey(0) & 0xff == 27:
+        #         cv2.destroyAllWindows()
+        
         print(f'Score = {max_score}')
         print(f'Combinations tested = {k}')
 
@@ -516,20 +517,20 @@ def display_lines_and_points_on_frame(frame, lines=(), points=(), line_color=(0,
     return frame
 
 
-if __name__ == '__main__':
-    filename = '../images/img1.jpg'
-    img = cv2.imread(filename)
-    import time
+# if __name__ == '__main__':
+#     filename = '../images/img1.jpg'
+#     img = cv2.imread(filename)
+#     import time
 
-    s = time.time()
-    court_detector = CourtDetector()
-    court_detector.detect(img, 0)
-    top, bottom = court_detector.get_extra_parts_location()
-    cv2.circle(img, tuple(top), 3, (0,255,0), 1)
-    cv2.circle(img, tuple(bottom), 3, (0,255,0), 1)
-    img[int(bottom[1]-10):int(bottom[1]+10), int(bottom[0] - 10):int(bottom[0]+10), :] = (0,0,0)
-    img[int(top[1]-10):int(top[1]+10), int(top[0] - 10):int(top[0]+10), :] = (0,0,0)
-    cv2.imshow('df', img)
-    if cv2.waitKey(0):
-        cv2.destroyAllWindows()
-    print(f'time = {time.time() - s}')
+#     s = time.time()
+#     court_detector = CourtDetector()
+#     court_detector.detect(img, 0)
+#     top, bottom = court_detector.get_extra_parts_location()
+#     cv2.circle(img, tuple(top), 3, (0,255,0), 1)
+#     cv2.circle(img, tuple(bottom), 3, (0,255,0), 1)
+#     img[int(bottom[1]-10):int(bottom[1]+10), int(bottom[0] - 10):int(bottom[0]+10), :] = (0,0,0)
+#     img[int(top[1]-10):int(top[1]+10), int(top[0] - 10):int(top[0]+10), :] = (0,0,0)
+#     cv2.imshow('df', img)
+#     if cv2.waitKey(0):
+#         cv2.destroyAllWindows()
+#     print(f'time = {time.time() - s}')

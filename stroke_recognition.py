@@ -194,32 +194,32 @@ def create_features_from_vids():
         print(count)
 
 
-if __name__ == "__main__":
-    create_features_from_vids()
-    '''batch = None
-    video = cv2.VideoCapture('../videos/vid1.mp4')
-    while True:
-        ret, frame = video.read()
-        if ret:
-            frame_t = frame.transpose((2, 0, 1)) / 255
-            frame_tensor = torch.from_numpy(frame_t).type(dtype)
-            frame_tensor = normalize(frame_tensor).unsqueeze(0)
-            with torch.no_grad():
-                # forward pass
-                features = feature_extractor(frame_tensor)
-            features = features.unsqueeze(1)
-            if batch is None:
-                batch = features
-            else:
-                batch = torch.cat([batch, features], dim=1)
-            if batch.size(1) > seq_len:
-                # TODO this might be problem, need to get the vector out of gpu
-                remove = batch[:,0,:]
-                remove.detach().cpu()
-                batch = batch[:, 1:, :]
-                output = model(batch)
-        else:
-            break
-    video.release()
+# if __name__ == "__main__":
+#     create_features_from_vids()
+#     '''batch = None
+#     video = cv2.VideoCapture('../videos/vid1.mp4')
+#     while True:
+#         ret, frame = video.read()
+#         if ret:
+#             frame_t = frame.transpose((2, 0, 1)) / 255
+#             frame_tensor = torch.from_numpy(frame_t).type(dtype)
+#             frame_tensor = normalize(frame_tensor).unsqueeze(0)
+#             with torch.no_grad():
+#                 # forward pass
+#                 features = feature_extractor(frame_tensor)
+#             features = features.unsqueeze(1)
+#             if batch is None:
+#                 batch = features
+#             else:
+#                 batch = torch.cat([batch, features], dim=1)
+#             if batch.size(1) > seq_len:
+#                 # TODO this might be problem, need to get the vector out of gpu
+#                 remove = batch[:,0,:]
+#                 remove.detach().cpu()
+#                 batch = batch[:, 1:, :]
+#                 output = model(batch)
+#         else:
+#             break
+#     video.release()
 
-    cv2.destroyAllWindows()'''
+#     cv2.destroyAllWindows()'''

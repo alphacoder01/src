@@ -170,46 +170,46 @@ class BallDetector:
         plt.show()
 
 
-if __name__ == "__main__":
-    ball_detector = BallDetector(
-        'saved states/tracknet_weights_lr_1.0_epochs_150_last_trained.pth')
-    cap = cv2.VideoCapture('../videos/vid1.mp4')
-    # get videos properties
-    fps, length, v_width, v_height = get_video_properties(cap)
+# if __name__ == "__main__":
+#     ball_detector = BallDetector(
+#         'saved states/tracknet_weights_lr_1.0_epochs_150_last_trained.pth')
+#     cap = cv2.VideoCapture('../videos/vid1.mp4')
+#     # get videos properties
+#     fps, length, v_width, v_height = get_video_properties(cap)
 
-    frame_i = 0
-    while True:
-        ret, frame = cap.read()
-        frame_i += 1
-        if not ret:
-            break
+#     frame_i = 0
+#     while True:
+#         ret, frame = cap.read()
+#         frame_i += 1
+#         if not ret:
+#             break
 
-        ball_detector.detect_ball(frame)
+#         ball_detector.detect_ball(frame)
 
-    cap.release()
-    cv2.destroyAllWindows()
+#     cap.release()
+#     cv2.destroyAllWindows()
 
-    from scipy.interpolate import interp1d
+#     from scipy.interpolate import interp1d
 
-    y_values = ball_detector.xy_coordinates[:, 1]
+#     y_values = ball_detector.xy_coordinates[:, 1]
 
-    new = signal.savgol_filter(y_values, 3, 2)
+#     new = signal.savgol_filter(y_values, 3, 2)
 
-    x = np.arange(0, len(new))
-    indices = [i for i, val in enumerate(new) if np.isnan(val)]
-    x = np.delete(x, indices)
-    y = np.delete(new, indices)
-    f = interp1d(x, y, fill_value="extrapolate")
-    f2 = interp1d(x, y, kind='cubic', fill_value="extrapolate")
-    xnew = np.linspace(0, len(y_values), num=len(y_values), endpoint=True)
-    plt.plot(np.arange(0, len(new)), new, 'o', xnew,
-             f2(xnew), '-r')
-    plt.legend(['data', 'inter'], loc='best')
-    plt.show()
+#     x = np.arange(0, len(new))
+#     indices = [i for i, val in enumerate(new) if np.isnan(val)]
+#     x = np.delete(x, indices)
+#     y = np.delete(new, indices)
+#     f = interp1d(x, y, fill_value="extrapolate")
+#     f2 = interp1d(x, y, kind='cubic', fill_value="extrapolate")
+#     xnew = np.linspace(0, len(y_values), num=len(y_values), endpoint=True)
+#     plt.plot(np.arange(0, len(new)), new, 'o', xnew,
+#              f2(xnew), '-r')
+#     plt.legend(['data', 'inter'], loc='best')
+#     plt.show()
 
-    positions = f2(xnew)
-    peaks, _ = find_peaks(positions, distance=30)
-    a = np.diff(peaks)
-    plt.plot(positions)
-    plt.plot(peaks, positions[peaks], "x")
-    plt.show()
+#     positions = f2(xnew)
+#     peaks, _ = find_peaks(positions, distance=30)
+#     a = np.diff(peaks)
+#     plt.plot(positions)
+#     plt.plot(peaks, positions[peaks], "x")
+#     plt.show()
